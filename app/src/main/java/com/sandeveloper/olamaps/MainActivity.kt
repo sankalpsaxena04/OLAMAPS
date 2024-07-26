@@ -66,8 +66,8 @@ class MainActivity : AppCompatActivity(), MapStatusCallback,
         setContentView(binding.root)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         viewModel.getAccessToken(
-            clientId = "55b0a201-4251-4389-bdf0-80176c0d64ed",
-            clientSecret = "vukA6AVH28JsyS87r4vrsZlIPb16FyM7",
+            clientId = BuildConfig.CLIENT_ID,
+            clientSecret = BuildConfig.CLIENT_SECRET,
             onSuccess = {
                 checkLocationPermission()
             }
@@ -117,8 +117,8 @@ class MainActivity : AppCompatActivity(), MapStatusCallback,
             val errorCode = p0.substring(it.lastIndex - 2)
             if (errorCode == "401") {
                 viewModel.getAccessToken(
-                    clientId = "55b0a201-4251-4389-bdf0-80176c0d64ed",
-                    clientSecret = "vukA6AVH28JsyS87r4vrsZlIPb16FyM7",
+                    clientId = BuildConfig.CLIENT_ID,
+                    clientSecret = BuildConfig.CLIENT_SECRET,
                     onSuccess = { olaMapsInit() }
                 )
             }
@@ -144,7 +144,7 @@ class MainActivity : AppCompatActivity(), MapStatusCallback,
             mapStatusCallback = this,
             olaMapsConfig = OlaMapsConfig.Builder()
                 .setApplicationContext(applicationContext) //pass the application context here, it is mandatory
-                .setClientId("55b0a201-4251-4389-bdf0-80176c0d64ed") //pass the Organization ID here, it is mandatory
+                .setClientId(BuildConfig.CLIENT_ID) //pass the Organization ID here, it is mandatory
                 .setMapBaseUrl(MAP_BASE_URL) // pass the Base URL of Ola-Maps here (Stage/Prod URL), it is mandatory
                 .setInterceptor { chain ->
                     val originalRequest = chain.request()

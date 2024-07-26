@@ -3,6 +3,7 @@ package com.sandeveloper.olamaps.remote
 import com.sandeveloper.olamaps.util.DataConstants.MAP_BASE_URL
 import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor
 import com.ola.maps.navigation.v5.model.route.RouteInfoData
+import com.sandeveloper.olamaps.BuildConfig
 import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -28,7 +29,7 @@ object OlaRouteRetrofitClient {
             val originalUrl = originalRequest.url
 
             val newUrl = originalUrl.newBuilder()
-                .addQueryParameter("api_key", "xzqIhmPkO7LdoD49BOJnCTxoPtGHx1tT7L4j3V2P")
+                .addQueryParameter("api_key", BuildConfig.API_KEY)
                 .build()
 
             val newRequest = originalRequest.newBuilder()

@@ -6,11 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.ola.maps.navigation.v5.model.route.RouteInfoData
+import com.sandeveloper.olamaps.BuildConfig
 import com.sandeveloper.olamaps.model.response.autocompletesearch.OlaSearchAutoCompleteResponse
 import com.sandeveloper.olamaps.remote.AutoCompleteRetrofitClient
 import com.sandeveloper.olamaps.remote.OlaRouteRetrofitClient
 import com.sandeveloper.olamaps.repository.autocomplete.OlaSearchAutoCompleteRepositoryImpl
-import com.sandeveloper.olamaps.util.DataConstants.API_KEY
 import com.sandeveloper.olamaps.util.NetworkResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -32,7 +32,7 @@ class OlaSearchAutoCompleteViewModel : ViewModel() {
         location: String,
         radius: Int,
         strictBounds: Boolean,
-        apiKey: String = API_KEY,
+        apiKey: String = BuildConfig.API_KEY,
         input: String
     ) {
         searchJob?.cancel() // Cancel any ongoing debounce job

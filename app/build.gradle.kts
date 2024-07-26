@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -19,6 +21,24 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary = true
+        }
+
+        val localProperties = Properties()
+        val localPropertiesFile = rootProject.file("local.properties")
+
+        if (localPropertiesFile.exists()) {
+            localProperties.load(localPropertiesFile.inputStream())
+
+            val clientId = localProperties.getProperty("CLIENT_ID")
+            val clientSecret = localProperties.getProperty("CLIENT_SECRET")
+            val apiKey = localProperties.getProperty("API_KEY")
+
+            buildConfigField("String", "CLIENT_ID", "\"${clientId}\"")
+            buildConfigField("String", "CLIENT_SECRET", "\"${clientSecret}\"")
+            buildConfigField("String", "API_KEY", "\"${apiKey}\"")
+        }
     }
 
     buildTypes {
