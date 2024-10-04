@@ -26,6 +26,13 @@ import com.ola.maps.mapslibrary.models.OlaMapsConfig
 import com.ola.maps.mapslibrary.models.OlaMarkerOptions
 import com.ola.maps.navigation.ui.v5.MapStatusCallback
 import com.appscrip.olamapdemo.viewmodel.MapsViewModel
+import com.google.android.gms.location.GeofencingRequest
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.Priority
+import com.google.android.gms.location.SettingsClient
+import com.google.android.gms.tasks.CancellationToken
+import com.google.android.gms.tasks.CancellationTokenSource
 import com.mapbox.api.directions.v5.models.DirectionsRoute
 import com.ola.maps.navigation.v5.model.route.RouteInfoData
 import com.ola.maps.navigation.v5.navigation.NavigationMapRoute
@@ -64,6 +71,7 @@ class MainActivity : AppCompatActivity(), MapStatusCallback,
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.loading.visibility = View.VISIBLE
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         viewModel.getAccessToken(
             clientId = BuildConfig.CLIENT_ID,
@@ -86,6 +94,7 @@ class MainActivity : AppCompatActivity(), MapStatusCallback,
         binding.olaMapView.apply {
             moveToCurrentLocation()
         }
+        binding.loading.visibility = View.GONE
         navigationRoute = binding.olaMapView.getNavigationMapRoute()
         binding.rvSearchedLocation.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
@@ -108,6 +117,7 @@ class MainActivity : AppCompatActivity(), MapStatusCallback,
     private fun currentLocation() {
         binding.cvCurrentLocation.setOnClickListener {
             binding.olaMapView.moveToCurrentLocation()
+
         }
     }
 
@@ -164,12 +174,12 @@ class MainActivity : AppCompatActivity(), MapStatusCallback,
                 .build()
         )
         setCurrentLocationLabel()
-    }
 
+    }
     @SuppressLint("MissingPermission")
     private fun setCurrentLocationLabel() {
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location: Location? ->
+        val result = fusedLocationClient.getCurrentLocation(Priority.PRIORITY_BALANCED_POWER_ACCURACY,CancellationTokenSource().token)
+        result.addOnSuccessListener { location: Location? ->
                 location?.let {
                     currentLatLng = LatLng(it.latitude, it.longitude)
 
